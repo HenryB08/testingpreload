@@ -174,6 +174,156 @@ html.lenis body {
 }
 
 /* ------------------------------------------------------------------ */
+/* Gear scene (orb in the middle of spinning metallic gears)           */
+/* ------------------------------------------------------------------ */
+.gearorb {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(circle at 50% 45%, #0c0e14 0%, #050609 72%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.gearorb__stage {
+  position: relative;
+  width: min(72vmin, 640px);
+  aspect-ratio: 1 / 1;
+}
+
+/* Dark brushed-metal rings. The conic gradient is the sheen; spinning the
+   element makes the highlight travel around like a turning gear. */
+.gearorb__gear {
+  position: absolute;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #3a3e46,
+    #0b0c0f,
+    #868d97,
+    #0b0c0f,
+    #4a4e57,
+    #0b0c0f,
+    #aab0ba,
+    #0b0c0f,
+    #3a3e46
+  );
+  -webkit-mask: radial-gradient(
+    closest-side,
+    #0000 var(--in),
+    #000 calc(var(--in) + 2%),
+    #000 var(--out),
+    #0000 calc(var(--out) + 2%)
+  );
+  mask: radial-gradient(
+    closest-side,
+    #0000 var(--in),
+    #000 calc(var(--in) + 2%),
+    #000 var(--out),
+    #0000 calc(var(--out) + 2%)
+  );
+}
+
+.gearorb__gear--1 {
+  inset: 0;
+  --in: 80%;
+  --out: 97%;
+  animation: gear-spin 20s linear infinite;
+}
+.gearorb__gear--2 {
+  inset: 11%;
+  --in: 72%;
+  --out: 95%;
+  animation: gear-spin 14s linear infinite reverse;
+}
+.gearorb__gear--3 {
+  inset: 23%;
+  --in: 60%;
+  --out: 94%;
+  animation: gear-spin 10s linear infinite;
+}
+
+/* Rainbow chromatic shimmer riding the rings. */
+.gearorb__chroma {
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #ff0040,
+    #ff8a00,
+    #ffe100,
+    #37ff5a,
+    #00e5ff,
+    #3b6bff,
+    #b14bff,
+    #ff0040
+  );
+  -webkit-mask: radial-gradient(closest-side, #0000 64%, #000 82%, #0000 100%);
+  mask: radial-gradient(closest-side, #0000 64%, #000 82%, #0000 100%);
+  filter: blur(10px);
+  opacity: 0.38;
+  mix-blend-mode: screen;
+  animation: gear-spin 12s linear infinite reverse;
+}
+
+/* Metallic bar crossing the rings. */
+.gearorb__bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 118%;
+  height: 6.5%;
+  transform: translate(-50%, -50%) rotate(28deg);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #aab0ba, #16181d 46%, #0a0b0e 54%, #4a4e57);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  transform-origin: center;
+  animation: bar-spin 26s linear infinite;
+}
+
+/* The glowing orb in the middle. */
+.gearorb__orb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(90, 150, 255, 0.5), 0 0 130px rgba(47, 107, 255, 0.32);
+}
+
+.gearorb__orb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.7);
+}
+
+@keyframes gear-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes bar-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(388deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gearorb__gear,
+  .gearorb__chroma,
+  .gearorb__bar {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Preloader overlay                                                   */
 /* ------------------------------------------------------------------ */
 .preloader {

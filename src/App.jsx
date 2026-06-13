@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
 import Intro from './preloader/Intro.jsx'
-import Preloader from './preloader/Preloader.jsx'
+import GearOrb from './preloader/GearOrb.jsx'
 import Hero from './Hero.jsx'
 import { useReducedMotion } from './preloader/useReducedMotion.js'
 
-// Phases: 'intro' (steven-style wordmark + stroke) -> 'preloader' (3D scene with
-// 00->100 counter) -> 'done' (hero revealed, smooth scroll active).
+// Phases: 'intro' (wordmark + orb fill + tagline) -> 'gears' (orb in the middle
+// of spinning metallic gears) -> 'done' (hero revealed, smooth scroll active).
 export default function App() {
   const [phase, setPhase] = useState('intro')
   const reduced = useReducedMotion()
@@ -37,8 +37,8 @@ export default function App() {
   return (
     <>
       <Hero active={phase === 'done'} />
-      {phase === 'preloader' && <Preloader onComplete={() => setPhase('done')} />}
-      {phase === 'intro' && <Intro onComplete={() => setPhase('preloader')} />}
+      {phase === 'gears' && <GearOrb onComplete={() => setPhase('done')} />}
+      {phase === 'intro' && <Intro onComplete={() => setPhase('gears')} />}
     </>
   )
 }
