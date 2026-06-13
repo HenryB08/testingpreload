@@ -7,13 +7,13 @@
 // `rate` makes it a little faster. Returns a cleanup function.
 export function setupOrbLoop(
   video,
-  { start = 0.1, end = 1.2, tail = 0.35, rate = 1.35, pingRate = 0.55 } = {},
+  { start = 0.1, end = 1.2, tail = 0.35, rate = 1.35, pingOmega = 1.7 } = {},
 ) {
   let rafId = null
   let lastTs = null
   let started = false
   let pingpong = false
-  let dir = -1
+  let phase = Math.PI // start of ping-pong sits at `end`
 
   const dur = () => video.duration || end + 1
   const winStart = () => Math.max(0, Math.min(start, dur() - 0.6))
@@ -43,18 +43,15 @@ export function setupOrbLoop(
         video.pause()
         seek(winEnd())
         pingpong = true
-        dir = -1
+        phase = Math.PI
       }
     } else {
-      let t = video.currentTime + dir * dt * pingRate
-      if (t <= tailStart()) {
-        t = tailStart()
-        dir = 1
-      } else if (t >= winEnd()) {
-        t = winEnd()
-        dir = -1
-      }
-      seek(t)
+      // Cosine oscillation between tailStart and winEnd: eases to a stop and
+      // reverses gently at each end (smooth), drifting at pingOmega rad/s.
+      phase += dt * pingOmega
+      const a = tailStart()
+      const b = winEnd()
+      seek(a + (b - a) * (0.5 - 0.5 * Math.cos(phase)))
     }
     rafId = requestAnimationFrame(frame)
   }
