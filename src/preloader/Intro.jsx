@@ -31,25 +31,25 @@ export default function Intro({ onComplete }) {
     const len = 2 * Math.PI * 95
     const loops = []
 
-    // Loop only the settled window of the clip: skip the lead-in (before START)
-    // and the dispersing tail (after END), so the orb just sits while the energy
-    // moves. Tune VIDEO_START / VIDEO_END (seconds) to taste.
+    // Play the settled window of the clip once, then freeze on the last frame
+    // (no loop): skip the lead-in (before START) and stop at END. Tune
+    // VIDEO_START / VIDEO_END (seconds) to taste.
     const VIDEO_START = 0.1
-    const VIDEO_END = 1.0
+    const VIDEO_END = 1.5
     const dur = () => video.duration || VIDEO_END + 1
-    const loopStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
-    const loopEnd = () => Math.max(loopStart() + 0.4, Math.min(VIDEO_END, dur()))
+    const playStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
+    const playEnd = () => Math.max(playStart() + 0.4, Math.min(VIDEO_END, dur()))
     const onMeta = () => {
       try {
-        video.currentTime = loopStart()
+        video.currentTime = playStart()
       } catch {
         /* seeking not ready yet */
       }
     }
     const onTime = () => {
-      const s = loopStart()
-      if (video.currentTime < s - 0.05 || video.currentTime >= loopEnd()) {
-        video.currentTime = s
+      if (video.currentTime >= playEnd()) {
+        video.currentTime = playEnd()
+        video.pause()
       }
     }
     video.addEventListener('loadedmetadata', onMeta)
@@ -137,7 +137,6 @@ export default function Intro({ onComplete }) {
               poster={ORB_POSTER}
               autoPlay
               muted
-              loop
               playsInline
               preload="auto"
             >
