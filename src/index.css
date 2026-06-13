@@ -92,11 +92,19 @@ html.lenis body {
   white-space: nowrap;
 }
 
-/* Per-letter spans so the wordmark can animate in letter by letter. */
+/* Per-letter spans so the wordmark can animate in letter by letter. Hidden
+   until the timeline slides them in (avoids a flash before JS runs). */
 .intro__letter {
   display: inline-block;
   white-space: pre;
+  opacity: 0;
   will-change: transform, opacity;
+}
+
+/* Keep the rim hidden until it draws (no full-circle flash on load). */
+.intro__circle circle {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
 }
 
 /* Square box centred over the wordmark; holds the orb, its glow and sparkles. */
