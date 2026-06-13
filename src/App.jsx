@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
 import Intro from './preloader/Intro.jsx'
 import Hero from './Hero.jsx'
+import Starfield from './Starfield.jsx'
 import { useReducedMotion } from './preloader/useReducedMotion.js'
 
 // Phases: 'intro' (wordmark + orb fill + tagline) -> 'done' (hero revealed,
@@ -35,7 +36,8 @@ export default function App() {
 
   return (
     <>
-      <Hero active={phase === 'done'} />
+      <Starfield />
+      {phase === 'done' && <Hero active />}
       {phase === 'intro' && <Intro onComplete={() => setPhase('done')} />}
     </>
   )

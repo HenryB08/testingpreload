@@ -24,6 +24,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Galaxy background canvas — sits behind all content, above the body colour. */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  pointer-events: none;
+}
+
 /* Lenis recommended baseline */
 html.lenis,
 html.lenis body {
@@ -37,7 +46,7 @@ html.lenis body {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: var(--bg);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
