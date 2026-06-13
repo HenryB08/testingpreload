@@ -20,6 +20,8 @@ export default function Intro({ onComplete }) {
   const videoRef = useRef()
   const ringRef = useRef()
   const glowRef = useRef()
+  const line1Ref = useRef()
+  const line2Ref = useRef()
 
   const reduced = useReducedMotion()
 
@@ -63,6 +65,7 @@ export default function Intro({ onComplete }) {
     gsap.set(ring, { strokeDasharray: len, strokeDashoffset: len })
     gsap.set(wrap, { '--hole': '100%' }) // orb hidden (revealed by shrinking hole)
     gsap.set(glowRef.current, { opacity: 0 })
+    gsap.set([line1Ref.current, line2Ref.current], { opacity: 0, y: 10 })
 
     if (reduced) {
       video.pause?.()
@@ -70,6 +73,7 @@ export default function Intro({ onComplete }) {
       gsap.set(ring, { strokeDashoffset: 0 })
       gsap.set(wrap, { '--hole': '0%' })
       gsap.set(glowRef.current, { opacity: 0.7 })
+      gsap.set(line2Ref.current, { opacity: 1, y: 0 })
       const call = gsap.delayedCall(1.2, onComplete)
       return () => {
         call.kill()
@@ -123,8 +127,13 @@ export default function Intro({ onComplete }) {
     // 5. horizon glow blooms, then a gentle pulse
     tl.to(glowRef.current, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
     tl.call(startPulse)
-    // 6. let it glow, then hand off
-    tl.to({}, { duration: 1.1 })
+    // 6. bottom tagline: "custom ai systems" -> "built for you"
+    tl.to(line1Ref.current, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.15')
+    tl.to({}, { duration: 0.95 })
+    tl.to(line1Ref.current, { opacity: 0, y: -8, duration: 0.4, ease: 'power2.in' })
+    tl.to(line2Ref.current, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.1')
+    tl.to({}, { duration: 1.0 })
+    // 7. hand off
     tl.to(rootRef.current, { autoAlpha: 0, duration: 0.6, ease: 'power2.inOut' })
 
     return () => {
@@ -175,6 +184,12 @@ export default function Intro({ onComplete }) {
             />
           </svg>
         </div>
+      </div>
+
+      {/* Bottom tagline (not scaled with the lockup). */}
+      <div className="intro__tagline">
+        <span className="intro__tagline-line" ref={line1Ref}>custom ai systems</span>
+        <span className="intro__tagline-line" ref={line2Ref}>built for you</span>
       </div>
     </div>
   )

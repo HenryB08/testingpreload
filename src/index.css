@@ -46,6 +46,32 @@ html.lenis body {
 .intro__lockup {
   position: relative;
   padding: 0 2rem;
+  /* Shrink the word + circle + orb together, kept centred. */
+  transform: scale(var(--intro-scale, 0.6));
+  transform-origin: center center;
+}
+
+/* Bottom tagline that appears after the orb fills (not scaled with the lockup). */
+.intro__tagline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.intro__tagline-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: block;
+  font-size: clamp(0.8rem, 1.8vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0;
 }
 
 .intro__word {
