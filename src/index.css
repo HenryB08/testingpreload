@@ -64,18 +64,74 @@ html.lenis body {
   will-change: transform, opacity;
 }
 
-/* A perfect circle drawn around the wordmark. Square box keeps it circular
-   regardless of how wide the word is. */
-.intro__circle {
+/* Square box centred over the wordmark; holds the orb, its glow and sparkles. */
+.intro__orb {
   position: absolute;
   left: 50%;
   top: 50%;
   width: clamp(360px, 72vw, 760px);
   aspect-ratio: 1 / 1;
-  height: auto;
   transform: translate(-50%, -50%);
-  overflow: visible;
   pointer-events: none;
+}
+
+.intro__circle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Blue bloom behind the orb. */
+.intro__glow {
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(150, 190, 255, 0.55) 0%,
+    rgba(47, 107, 255, 0.4) 38%,
+    rgba(47, 107, 255, 0) 70%
+  );
+  filter: blur(26px);
+  opacity: 0;
+}
+
+/* 4-point lens-flare sparkle: a soft core with a crossed white flare. */
+.intro__spark {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 255, 0.95),
+    rgba(180, 210, 255, 0.5) 28%,
+    rgba(180, 210, 255, 0) 62%
+  );
+  filter: drop-shadow(0 0 6px rgba(150, 190, 255, 0.9));
+  will-change: transform, opacity;
+}
+
+.intro__spark::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -32%;
+  width: 6%;
+  height: 164%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, transparent, #fff 50%, transparent);
+}
+
+.intro__spark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -32%;
+  height: 6%;
+  width: 164%;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, transparent, #fff 50%, transparent);
 }
 
 /* ------------------------------------------------------------------ */
