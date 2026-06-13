@@ -7,7 +7,7 @@
 // `rate` makes it a little faster. Returns a cleanup function.
 export function setupOrbLoop(
   video,
-  { start = 0.1, end = 1.2, tail = 0.5, rate = 1.35, pingOmega = 2.4 } = {},
+  { start = 0.1, end = 1.2, tail = 0.4, rate = 1.35, pingOmega = 4.5 } = {},
 ) {
   let rafId = null
   let lastTs = null
