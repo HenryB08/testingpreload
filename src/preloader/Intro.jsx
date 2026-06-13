@@ -75,17 +75,17 @@ export default function Intro({ onComplete }) {
           {/* Orb fill (under the rim) — grows inward to a full disc. */}
           <circle ref={fillRef} cx="100" cy="100" r="95" fill="none" stroke="url(#intro-orb)" strokeWidth="0" />
 
-          {/* Blue rim that draws on, then stays as the orb's edge. */}
+          {/* Rim that draws on — uses the orb image itself, so its colour and
+              glassy highlights match the PNG and align with the fill. */}
           <circle
             ref={ringRef}
             cx="100"
             cy="100"
             r="95"
             fill="none"
-            stroke="#2f6bff"
-            strokeWidth="2.5"
+            stroke="url(#intro-orb)"
+            strokeWidth="3"
             strokeLinecap="round"
-            transform="rotate(-90 100 100)"
           />
         </svg>
       </div>
