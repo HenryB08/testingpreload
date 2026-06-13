@@ -185,8 +185,9 @@ export default function Starfield() {
     initStars()
     draw()
     const shootInt = reduced ? null : setInterval(() => {
-      if (Math.random() < 0.7) spawnShooter()
-    }, 1600)
+      if (Math.random() < 0.9) spawnShooter()
+      if (Math.random() < 0.4) spawnShooter() // occasional second one
+    }, 850)
 
     const onResize = () => {
       resize()
