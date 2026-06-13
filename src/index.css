@@ -31,6 +31,45 @@ html.lenis body {
 }
 
 /* ------------------------------------------------------------------ */
+/* Intro (steven.com-style wordmark + marker stroke)                   */
+/* ------------------------------------------------------------------ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro__lockup {
+  position: relative;
+  padding: 0 2rem;
+}
+
+.intro__word {
+  display: block;
+  font-weight: 700;
+  font-size: clamp(2rem, 8vw, 5rem);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* The marker stroke sits on top of the wordmark and sweeps beyond it. */
+.intro__stroke {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 132%;
+  height: 240%;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
 /* Preloader overlay                                                   */
 /* ------------------------------------------------------------------ */
 .preloader {
