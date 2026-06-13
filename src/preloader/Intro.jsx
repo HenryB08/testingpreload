@@ -16,6 +16,7 @@ export default function Intro({ onComplete }) {
   const rootRef = useRef()
   const wordRef = useRef()
   const orbRef = useRef()
+  const wrapRef = useRef()
   const videoRef = useRef()
   const ringRef = useRef()
   const glowRef = useRef()
@@ -25,6 +26,7 @@ export default function Intro({ onComplete }) {
   useEffect(() => {
     const ring = ringRef.current
     const video = videoRef.current
+    const wrap = wrapRef.current
     const letters = wordRef.current.querySelectorAll('.intro__letter')
     const len = 2 * Math.PI * 95
     const loops = []
@@ -55,14 +57,14 @@ export default function Intro({ onComplete }) {
     }
 
     gsap.set(ring, { strokeDasharray: len, strokeDashoffset: len })
-    gsap.set(video, { '--hole': '100%' }) // orb hidden (revealed by shrinking hole)
+    gsap.set(wrap, { '--hole': '100%' }) // orb hidden (revealed by shrinking hole)
     gsap.set(glowRef.current, { opacity: 0 })
 
     if (reduced) {
       video.pause?.()
       gsap.set(letters, { opacity: 1, x: 0 })
       gsap.set(ring, { strokeDashoffset: 0 })
-      gsap.set(video, { '--hole': '0%' })
+      gsap.set(wrap, { '--hole': '0%' })
       gsap.set(glowRef.current, { opacity: 0.7 })
       const call = gsap.delayedCall(1.2, onComplete)
       return () => {
@@ -95,7 +97,7 @@ export default function Intro({ onComplete }) {
     // 3. rim draws around the word
     tl.to(ring, { strokeDashoffset: 0, duration: 0.65, ease: 'power2.inOut' })
     // 4. orb video wipes in from the outer edge to the centre
-    tl.to(video, { '--hole': '0%', duration: 0.55, ease: 'power2.in' }, '+=0.12')
+    tl.to(wrap, { '--hole': '0%', duration: 0.55, ease: 'power2.in' }, '+=0.12')
     // 5. horizon glow blooms, then a gentle pulse
     tl.to(glowRef.current, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
     tl.call(startPulse)
@@ -122,18 +124,22 @@ export default function Intro({ onComplete }) {
         <div className="intro__orb" ref={orbRef}>
           <div className="intro__glow" ref={glowRef} />
 
-          <video
-            ref={videoRef}
-            className="intro__video"
-            poster={ORB_POSTER}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          >
-            <source src={ORB_VIDEO} type="video/mp4" />
-          </video>
+          {/* Circle-clipped wrapper holds the wipe mask; the video inside is
+              zoomed so the orb's horizon reaches the edge. */}
+          <div className="intro__videowrap" ref={wrapRef}>
+            <video
+              ref={videoRef}
+              className="intro__video"
+              poster={ORB_POSTER}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            >
+              <source src={ORB_VIDEO} type="video/mp4" />
+            </video>
+          </div>
 
           {/* Thin glowing rim that draws on around the word. */}
           <svg className="intro__circle" viewBox="0 0 200 200" aria-hidden="true">

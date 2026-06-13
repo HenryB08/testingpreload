@@ -108,13 +108,11 @@ html.lenis body {
   initial-value: 100%;
 }
 
-.intro__video {
+.intro__videowrap {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   border-radius: 50%;
+  overflow: hidden;
   --hole: 100%;
   -webkit-mask-image: radial-gradient(
     circle closest-side at center,
@@ -126,6 +124,16 @@ html.lenis body {
     transparent calc(var(--hole) - 0.5%),
     #000 var(--hole)
   );
+}
+
+.intro__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Zoom so the orb's energy/horizon reaches the circle edge (no dark gap). */
+  transform: scale(var(--orb-zoom, 1.55));
+  transform-origin: center;
 }
 
 /* Soft glow on the drawn rim. */
