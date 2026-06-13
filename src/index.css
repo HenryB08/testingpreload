@@ -57,6 +57,13 @@ html.lenis body {
   white-space: nowrap;
 }
 
+/* Per-letter spans so the wordmark can animate in letter by letter. */
+.intro__letter {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform, opacity;
+}
+
 /* A perfect circle drawn around the wordmark. Square box keeps it circular
    regardless of how wide the word is. */
 .intro__circle {
