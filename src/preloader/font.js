@@ -6,4 +6,6 @@
 //
 // When you send the real "S" logo SVG, the Emblem can switch from this text "S"
 // to your SVG without touching this file.
-export const FONT = '/fonts/Poppins-SemiBold.ttf'
+// BASE_URL is "/" in dev and "/testingpreload/" in the Pages build, so the font
+// resolves correctly in both.
+export const FONT = `${import.meta.env.BASE_URL}fonts/Poppins-SemiBold.ttf`

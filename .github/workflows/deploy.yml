@@ -1,0 +1,31 @@
+name: Deploy preview to GitHub Pages
+
+# Builds the static preloader and publishes it to the gh-pages branch on every
+# push to the working branch. Enable Pages once (Settings -> Pages -> Source:
+# "Deploy from a branch" -> gh-pages / root) and the live URL auto-updates.
+on:
+  push:
+    branches: [claude/focused-planck-2jxk58]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+      - run: npm run build
+
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
