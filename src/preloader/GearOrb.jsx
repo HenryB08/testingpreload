@@ -19,7 +19,7 @@ export default function GearOrb({ onComplete }) {
     const video = videoRef.current
 
     // Same smooth ping-pong loop as the intro orb.
-    const cleanupVideo = setupOrbLoop(video, { start: 0.1, end: 1.2, tail: 0.25 })
+    const cleanupVideo = setupOrbLoop(video, { start: 0.1, end: 1.2 })
     if (!reduced) video.play?.().catch(() => {})
 
     const tl = gsap.timeline({ onComplete })

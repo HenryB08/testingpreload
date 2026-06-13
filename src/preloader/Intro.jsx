@@ -35,7 +35,7 @@ export default function Intro({ onComplete }) {
     const loops = []
 
     // Play the settled window once, then smoothly ping-pong its tail.
-    const cleanupVideo = setupOrbLoop(video, { start: 0.1, end: 1.2, tail: 0.25 })
+    const cleanupVideo = setupOrbLoop(video, { start: 0.1, end: 1.2 })
 
     gsap.set(ring, { strokeDasharray: len, strokeDashoffset: len })
     gsap.set(wrap, { '--hole': '100%' }) // orb hidden (revealed by shrinking hole)
