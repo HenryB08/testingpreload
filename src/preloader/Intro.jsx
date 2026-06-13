@@ -29,6 +29,31 @@ export default function Intro({ onComplete }) {
     const len = 2 * Math.PI * 95
     const loops = []
 
+    // Skip the clip's lead-in and loop only the settled portion, so the orb
+    // sits in place while the energy around it keeps moving. Tune VIDEO_START
+    // (seconds) to where the clip settles.
+    const VIDEO_START = 2.0
+    const clampStart = () =>
+      Math.max(0, Math.min(VIDEO_START, (video.duration || VIDEO_START + 1) - 0.5))
+    const onMeta = () => {
+      try {
+        video.currentTime = clampStart()
+      } catch {
+        /* seeking not ready yet */
+      }
+    }
+    const onTime = () => {
+      const s = clampStart()
+      if (video.currentTime < s - 0.05) video.currentTime = s
+    }
+    video.addEventListener('loadedmetadata', onMeta)
+    video.addEventListener('timeupdate', onTime)
+    if (video.readyState >= 1) onMeta()
+    const cleanupVideo = () => {
+      video.removeEventListener('loadedmetadata', onMeta)
+      video.removeEventListener('timeupdate', onTime)
+    }
+
     gsap.set(ring, { strokeDasharray: len, strokeDashoffset: len })
     gsap.set(video, { '--hole': '100%' }) // orb hidden (revealed by shrinking hole)
     gsap.set(glowRef.current, { opacity: 0 })
@@ -40,7 +65,10 @@ export default function Intro({ onComplete }) {
       gsap.set(video, { '--hole': '0%' })
       gsap.set(glowRef.current, { opacity: 0.7 })
       const call = gsap.delayedCall(1.2, onComplete)
-      return () => call.kill()
+      return () => {
+        call.kill()
+        cleanupVideo()
+      }
     }
 
     video.play?.().catch(() => {})
@@ -78,6 +106,7 @@ export default function Intro({ onComplete }) {
     return () => {
       tl.kill()
       loops.forEach((l) => l.kill())
+      cleanupVideo()
     }
   }, [reduced, onComplete])
 
