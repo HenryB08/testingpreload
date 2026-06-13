@@ -31,22 +31,26 @@ export default function Intro({ onComplete }) {
     const len = 2 * Math.PI * 95
     const loops = []
 
-    // Skip the clip's lead-in and loop only the settled portion, so the orb
-    // sits in place while the energy around it keeps moving. Tune VIDEO_START
-    // (seconds) to where the clip settles.
-    const VIDEO_START = 2.0
-    const clampStart = () =>
-      Math.max(0, Math.min(VIDEO_START, (video.duration || VIDEO_START + 1) - 0.5))
+    // Loop only the settled window of the clip: skip the lead-in (before START)
+    // and the dispersing tail (after END), so the orb just sits while the energy
+    // moves. Tune VIDEO_START / VIDEO_END (seconds) to taste.
+    const VIDEO_START = 1.6
+    const VIDEO_END = 3.8
+    const dur = () => video.duration || VIDEO_END + 1
+    const loopStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
+    const loopEnd = () => Math.max(loopStart() + 0.4, Math.min(VIDEO_END, dur()))
     const onMeta = () => {
       try {
-        video.currentTime = clampStart()
+        video.currentTime = loopStart()
       } catch {
         /* seeking not ready yet */
       }
     }
     const onTime = () => {
-      const s = clampStart()
-      if (video.currentTime < s - 0.05) video.currentTime = s
+      const s = loopStart()
+      if (video.currentTime < s - 0.05 || video.currentTime >= loopEnd()) {
+        video.currentTime = s
+      }
     }
     video.addEventListener('loadedmetadata', onMeta)
     video.addEventListener('timeupdate', onTime)
