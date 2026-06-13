@@ -1,0 +1,199 @@
+:root {
+  --bg: #060a16;
+  --accent: #2f6bff;
+  --text: #ffffff;
+  --muted: #9bb4ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lenis recommended baseline */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/* Preloader overlay                                                   */
+/* ------------------------------------------------------------------ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+}
+
+.preloader canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.preloader__brand {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+.preloader__counter {
+  position: absolute;
+  left: 1.8rem;
+  bottom: 1.8rem;
+  right: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.preloader__count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.preloader__count-num {
+  font-size: clamp(2.5rem, 9vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.preloader__count-max {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.preloader__bar {
+  width: 100%;
+  height: 2px;
+  background: rgba(155, 180, 255, 0.18);
+  overflow: hidden;
+}
+
+.preloader__bar-fill {
+  height: 100%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  transition: width 0.1s linear;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero / revealed page                                                */
+/* ------------------------------------------------------------------ */
+.hero-page {
+  position: relative;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem 1.8rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero__brand {
+  position: absolute;
+  top: 1.6rem;
+  left: 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.hero__title {
+  margin: 0;
+  font-size: clamp(2.6rem, 9vw, 7rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  max-width: 14ch;
+}
+
+/* Mask so each line slides up from behind a clipped edge */
+.line-wrap {
+  display: block;
+  overflow: hidden;
+}
+
+.line {
+  display: block;
+  will-change: transform;
+}
+
+.hero__sub {
+  margin-top: 1.8rem;
+  max-width: 46ch;
+  font-size: clamp(1rem, 2.4vw, 1.4rem);
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.hero__scroll {
+  position: absolute;
+  bottom: 1.8rem;
+  left: 1.8rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.panel {
+  min-height: 70vh;
+  padding: 6rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid rgba(155, 180, 255, 0.12);
+}
+
+.panel--alt {
+  background: linear-gradient(180deg, transparent, rgba(47, 107, 255, 0.06));
+}
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.panel p {
+  margin: 0;
+  max-width: 50ch;
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-weight: 300;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader__bar-fill {
+    transition: none;
+  }
+}
