@@ -110,7 +110,9 @@ html.lenis body {
 
 .intro__videowrap {
   position: absolute;
-  inset: 0;
+  /* Match the drawn rim (r=95 of 100), so the orb's clipped edge sits on the
+     ring instead of leaving a gap. */
+  inset: 2.5%;
   border-radius: 50%;
   overflow: hidden;
   --hole: 100%;
@@ -132,7 +134,7 @@ html.lenis body {
   object-fit: cover;
   display: block;
   /* Zoom so the orb's energy/horizon reaches the circle edge (no dark gap). */
-  transform: scale(var(--orb-zoom, 1.55));
+  transform: scale(var(--orb-zoom, 1.9));
   transform-origin: center;
 }
 
