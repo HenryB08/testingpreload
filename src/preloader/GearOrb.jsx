@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useReducedMotion } from './useReducedMotion.js'
+import { setupOrbLoop } from './orbLoop.js'
 
 const ORB_POSTER = `${import.meta.env.BASE_URL}syntrex-orb.jpg`
 const ORB_VIDEO =
@@ -17,29 +18,9 @@ export default function GearOrb({ onComplete }) {
   useEffect(() => {
     const video = videoRef.current
 
-    // Loop the settled tail of the orb clip (same as the intro).
-    const VIDEO_START = 0.1
-    const VIDEO_END = 1.2
-    const LOOP_TAIL = 0.2
-    const dur = () => video.duration || VIDEO_END + 1
-    const playStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
-    const playEnd = () => Math.max(playStart() + 0.4, Math.min(VIDEO_END, dur()))
-    const onMeta = () => {
-      try {
-        video.currentTime = playStart()
-      } catch {
-        /* not seekable yet */
-      }
-    }
-    const onTime = () => {
-      if (video.currentTime >= playEnd()) {
-        video.currentTime = Math.max(playStart(), playEnd() - LOOP_TAIL)
-      }
-    }
-    video.addEventListener('loadedmetadata', onMeta)
-    video.addEventListener('timeupdate', onTime)
-    if (video.readyState >= 1) onMeta()
-    video.play?.().catch(() => {})
+    // Same smooth ping-pong loop as the intro orb.
+    const cleanupVideo = setupOrbLoop(video, { start: 0.1, end: 1.2, tail: 0.25 })
+    if (!reduced) video.play?.().catch(() => {})
 
     const tl = gsap.timeline({ onComplete })
     tl.from(rootRef.current, { autoAlpha: 0, duration: 0.6, ease: 'power2.out' })
@@ -48,8 +29,7 @@ export default function GearOrb({ onComplete }) {
 
     return () => {
       tl.kill()
-      video.removeEventListener('loadedmetadata', onMeta)
-      video.removeEventListener('timeupdate', onTime)
+      cleanupVideo()
     }
   }, [reduced, onComplete])
 

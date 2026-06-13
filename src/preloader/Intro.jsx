@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useReducedMotion } from './useReducedMotion.js'
+import { setupOrbLoop } from './orbLoop.js'
 
 // Still frame used as the video poster (instant) while the orb video loads.
 const ORB_POSTER = `${import.meta.env.BASE_URL}syntrex-orb.jpg`
@@ -33,36 +34,8 @@ export default function Intro({ onComplete }) {
     const len = 2 * Math.PI * 95
     const loops = []
 
-    // Play the settled window of the clip once, then freeze on the last frame
-    // (no loop): skip the lead-in (before START) and stop at END. Tune
-    // VIDEO_START / VIDEO_END (seconds) to taste.
-    const VIDEO_START = 0.1
-    const VIDEO_END = 1.2
-    const dur = () => video.duration || VIDEO_END + 1
-    const playStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
-    const playEnd = () => Math.max(playStart() + 0.4, Math.min(VIDEO_END, dur()))
-    const onMeta = () => {
-      try {
-        video.currentTime = playStart()
-      } catch {
-        /* seeking not ready yet */
-      }
-    }
-    // Play the window once, then loop just the last LOOP_TAIL seconds so the orb
-    // keeps gently moving instead of freezing.
-    const LOOP_TAIL = 0.2
-    const onTime = () => {
-      if (video.currentTime >= playEnd()) {
-        video.currentTime = Math.max(playStart(), playEnd() - LOOP_TAIL)
-      }
-    }
-    video.addEventListener('loadedmetadata', onMeta)
-    video.addEventListener('timeupdate', onTime)
-    if (video.readyState >= 1) onMeta()
-    const cleanupVideo = () => {
-      video.removeEventListener('loadedmetadata', onMeta)
-      video.removeEventListener('timeupdate', onTime)
-    }
+    // Play the settled window once, then smoothly ping-pong its tail.
+    const cleanupVideo = setupOrbLoop(video, { start: 0.1, end: 1.2, tail: 0.25 })
 
     gsap.set(ring, { strokeDasharray: len, strokeDashoffset: len })
     gsap.set(wrap, { '--hole': '100%' }) // orb hidden (revealed by shrinking hole)
@@ -108,7 +81,7 @@ export default function Intro({ onComplete }) {
     // 3. rim draws around the word
     tl.to(ring, { strokeDashoffset: 0, duration: 0.65, ease: 'power2.inOut' })
     // 4. orb video wipes in from the outer edge to the centre — start the clip
-    //    here so its one play happens while it's visible, then it freezes.
+    //    here so its play happens while it's visible (then it ping-pong loops).
     tl.to(
       wrap,
       {
@@ -117,7 +90,7 @@ export default function Intro({ onComplete }) {
         ease: 'power2.in',
         onStart: () => {
           try {
-            video.currentTime = playStart()
+            video.currentTime = 0.1
           } catch {
             /* not seekable yet */
           }
