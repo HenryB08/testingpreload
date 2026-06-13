@@ -77,7 +77,8 @@ export default function Intro({ onComplete }) {
       }
     }
 
-    video.play?.().catch(() => {})
+    // Hold on the first frame; the video is started when the orb is revealed.
+    video.pause?.()
     gsap.set(letters, { opacity: 0, x: 26 })
 
     const startPulse = () => {
@@ -100,8 +101,25 @@ export default function Intro({ onComplete }) {
     tl.to({}, { duration: 0.3 })
     // 3. rim draws around the word
     tl.to(ring, { strokeDashoffset: 0, duration: 0.65, ease: 'power2.inOut' })
-    // 4. orb video wipes in from the outer edge to the centre
-    tl.to(wrap, { '--hole': '0%', duration: 0.55, ease: 'power2.in' }, '+=0.12')
+    // 4. orb video wipes in from the outer edge to the centre — start the clip
+    //    here so its one play happens while it's visible, then it freezes.
+    tl.to(
+      wrap,
+      {
+        '--hole': '0%',
+        duration: 0.55,
+        ease: 'power2.in',
+        onStart: () => {
+          try {
+            video.currentTime = playStart()
+          } catch {
+            /* not seekable yet */
+          }
+          video.play?.().catch(() => {})
+        },
+      },
+      '+=0.12',
+    )
     // 5. horizon glow blooms, then a gentle pulse
     tl.to(glowRef.current, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
     tl.call(startPulse)
@@ -135,7 +153,6 @@ export default function Intro({ onComplete }) {
               ref={videoRef}
               className="intro__video"
               poster={ORB_POSTER}
-              autoPlay
               muted
               playsInline
               preload="auto"
