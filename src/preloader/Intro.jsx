@@ -31,7 +31,7 @@ export default function Intro({ onComplete }) {
     // 1. wordmark in
     tl.to(wordRef.current, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' })
     // 2. ring draws around the word
-    tl.to(circle, { strokeDashoffset: 0, duration: 1.0, ease: 'power2.inOut' }, '-=0.1')
+    tl.to(circle, { strokeDashoffset: 0, duration: 0.65, ease: 'power2.inOut' }, '-=0.1')
     // 3. ring fills inward: outer edge stays put while the stroke thickens toward
     //    the centre, ending as a solid disc over the wordmark.
     tl.to(
