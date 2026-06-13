@@ -57,13 +57,15 @@ html.lenis body {
   white-space: nowrap;
 }
 
-/* The marker stroke sits on top of the wordmark and sweeps beyond it. */
-.intro__stroke {
+/* A perfect circle drawn around the wordmark. Square box keeps it circular
+   regardless of how wide the word is. */
+.intro__circle {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 132%;
-  height: 240%;
+  width: clamp(360px, 72vw, 760px);
+  aspect-ratio: 1 / 1;
+  height: auto;
   transform: translate(-50%, -50%);
   overflow: visible;
   pointer-events: none;
