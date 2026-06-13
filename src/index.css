@@ -136,21 +136,24 @@ html.lenis body {
 
 .intro__videowrap {
   position: absolute;
-  /* Match the drawn rim (r=95 of 100), so the orb's clipped edge sits on the
-     ring instead of leaving a gap. */
-  inset: 2.5%;
-  border-radius: 50%;
-  overflow: hidden;
+  /* Larger than the circle so the orb's energy can spill past the rim. The mask
+     keeps it solid out to ~the ring (70%), then feathers to transparent (96%),
+     so there is no hard edge. --hole drives the outside-in reveal. */
+  inset: -25%;
   --hole: 100%;
   -webkit-mask-image: radial-gradient(
     circle closest-side at center,
     transparent calc(var(--hole) - 0.5%),
-    #000 var(--hole)
+    #000 var(--hole),
+    #000 70%,
+    transparent 96%
   );
   mask-image: radial-gradient(
     circle closest-side at center,
     transparent calc(var(--hole) - 0.5%),
-    #000 var(--hole)
+    #000 var(--hole),
+    #000 70%,
+    transparent 96%
   );
 }
 
@@ -159,8 +162,9 @@ html.lenis body {
   height: 100%;
   object-fit: cover;
   display: block;
-  /* Zoom so the orb's energy/horizon reaches the circle edge (no dark gap). */
-  transform: scale(var(--orb-zoom, 1.9));
+  /* Box is enlarged (wrap inset -25%), so a smaller scale keeps the orb the same
+     size while showing more of its surrounding energy beyond the ring. */
+  transform: scale(var(--orb-zoom, 1.2));
   transform-origin: center;
 }
 
