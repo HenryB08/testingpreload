@@ -28,9 +28,19 @@ export default function Intro({ onComplete }) {
     gsap.set(wordRef.current, { opacity: 0, y: 12 })
 
     const tl = gsap.timeline({ onComplete })
+    // 1. wordmark in
     tl.to(wordRef.current, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' })
+    // 2. ring draws around the word
     tl.to(circle, { strokeDashoffset: 0, duration: 1.0, ease: 'power2.inOut' }, '-=0.1')
-    tl.to(rootRef.current, { autoAlpha: 0, duration: 0.5, ease: 'power2.inOut' }, '+=0.45')
+    // 3. ring fills inward: outer edge stays put while the stroke thickens toward
+    //    the centre, ending as a solid disc over the wordmark.
+    tl.to(
+      circle,
+      { attr: { r: 47.5, 'stroke-width': 95 }, duration: 0.55, ease: 'power2.in' },
+      '+=0.12',
+    )
+    // 4. hand off to the preloader
+    tl.to(rootRef.current, { autoAlpha: 0, duration: 0.5, ease: 'power2.inOut' }, '+=0.2')
     return () => tl.kill()
   }, [reduced, onComplete])
 
