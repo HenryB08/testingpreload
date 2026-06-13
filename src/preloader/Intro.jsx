@@ -34,8 +34,8 @@ export default function Intro({ onComplete }) {
     // Loop only the settled window of the clip: skip the lead-in (before START)
     // and the dispersing tail (after END), so the orb just sits while the energy
     // moves. Tune VIDEO_START / VIDEO_END (seconds) to taste.
-    const VIDEO_START = 0.1
-    const VIDEO_END = 0.8
+    const VIDEO_START = 0.0
+    const VIDEO_END = 0.45
     const dur = () => video.duration || VIDEO_END + 1
     const loopStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
     const loopEnd = () => Math.max(loopStart() + 0.4, Math.min(VIDEO_END, dur()))
