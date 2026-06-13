@@ -35,7 +35,7 @@ export default function Intro({ onComplete }) {
     // (no loop): skip the lead-in (before START) and stop at END. Tune
     // VIDEO_START / VIDEO_END (seconds) to taste.
     const VIDEO_START = 0.1
-    const VIDEO_END = 1.5
+    const VIDEO_END = 1.2
     const dur = () => video.duration || VIDEO_END + 1
     const playStart = () => Math.max(0, Math.min(VIDEO_START, dur() - 0.6))
     const playEnd = () => Math.max(playStart() + 0.4, Math.min(VIDEO_END, dur()))
