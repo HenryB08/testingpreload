@@ -48,10 +48,12 @@ export default function Intro({ onComplete }) {
         /* seeking not ready yet */
       }
     }
+    // Play the window once, then loop just the last LOOP_TAIL seconds so the orb
+    // keeps gently moving instead of freezing.
+    const LOOP_TAIL = 0.2
     const onTime = () => {
       if (video.currentTime >= playEnd()) {
-        video.currentTime = playEnd()
-        video.pause()
+        video.currentTime = Math.max(playStart(), playEnd() - LOOP_TAIL)
       }
     }
     video.addEventListener('loadedmetadata', onMeta)
