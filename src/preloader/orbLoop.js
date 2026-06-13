@@ -5,7 +5,10 @@
 // overshoot — so there's no visible cut, just a continuous back-and-forth.
 //
 // `rate` makes it a little faster. Returns a cleanup function.
-export function setupOrbLoop(video, { start = 0.1, end = 1.2, tail = 0.35, rate = 1.35 } = {}) {
+export function setupOrbLoop(
+  video,
+  { start = 0.1, end = 1.2, tail = 0.35, rate = 1.35, pingRate = 0.55 } = {},
+) {
   let rafId = null
   let lastTs = null
   let started = false
@@ -43,7 +46,7 @@ export function setupOrbLoop(video, { start = 0.1, end = 1.2, tail = 0.35, rate 
         dir = -1
       }
     } else {
-      let t = video.currentTime + dir * dt * rate
+      let t = video.currentTime + dir * dt * pingRate
       if (t <= tailStart()) {
         t = tailStart()
         dir = 1
